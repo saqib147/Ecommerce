@@ -1,7 +1,7 @@
 import Product from "../models/Product.js";
 
 export const getProducts = async (req, res) => {
-  const { category, brand, minPrice, maxPrice, search, featured, page = 1, limit = 10 } = req.query;
+  const { category, brand, minPrice, maxPrice, search, featured, page = 1, limit = 10, sort } = req.query;
 
   let query = {};
 
@@ -21,8 +21,13 @@ export const getProducts = async (req, res) => {
     ];
   }
 
+  let sortOption = {};
+  if (sort) {
+    sortOption = sort.startsWith('-') ? { [sort.slice(1)]: -1 } : { [sort]: 1 };
+  }
+
   const skip = (page - 1) * limit;
-  const products = await Product.find(query).skip(skip).limit(Number(limit));
+  const products = await Product.find(query).sort(sortOption).skip(skip).limit(Number(limit));
   const total = await Product.countDocuments(query);
 
   res.json({
@@ -78,4 +83,27 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   await Product.findByIdAndDelete(req.params.id);
   res.json({ message: "Product deleted" });
+};
+
+export const getProductsByCategory = async (req, res) => {
+  const { category } = req.params;
+  const { page = 1, limit = 10, sort } = req.query;
+
+  let query = { category: { $regex: category, $options: 'i' } };
+
+  let sortOption = {};
+  if (sort) {
+    sortOption = sort.startsWith('-') ? { [sort.slice(1)]: -1 } : { [sort]: 1 };
+  }
+
+  const skip = (page - 1) * limit;
+  const products = await Product.find(query).sort(sortOption).skip(skip).limit(Number(limit));
+  const total = await Product.countDocuments(query);
+
+  res.json({
+    products,
+    totalPages: Math.ceil(total / limit),
+    currentPage: Number(page),
+    totalProducts: total
+  });
 };

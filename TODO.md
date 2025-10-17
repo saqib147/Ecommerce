@@ -1,0 +1,5 @@
+- [x] Remove min-h-screen from the main div in DefaultProduct.jsx
+- [x] Change img className to "w-full h-auto object-contain object-center" to display full image
+- [x] Set left and right sections to h-auto for height to match image
+- [x] Set main div to h-[50vh] to limit component height to 50% of viewport
+- [ ] Run npm run dev to verify the component displays correctly
