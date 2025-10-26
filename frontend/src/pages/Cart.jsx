@@ -94,7 +94,10 @@ const Cart = () => {
                 >
                   Continue Shopping
                 </button>
-                <button className="flex-1 bg-black text-white py-3 px-6 rounded-md hover:bg-gray-800 transition-colors">
+                <button
+                  onClick={() => navigate('/checkout')}
+                  className="flex-1 bg-black text-white py-3 px-6 rounded-md hover:bg-gray-800 transition-colors"
+                >
                   Checkout
                 </button>
               </div>

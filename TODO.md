@@ -1,5 +1,13 @@
-- [x] Remove min-h-screen from the main div in DefaultProduct.jsx
-- [x] Change img className to "w-full h-auto object-contain object-center" to display full image
-- [x] Set left and right sections to h-auto for height to match image
-- [x] Set main div to h-[50vh] to limit component height to 50% of viewport
-- [ ] Run npm run dev to verify the component displays correctly
+# TODO: Implement Pagination for Admin Management Components
+
+## Backend Changes
+- [x] Update userController.js to support pagination for getAllUsers
+- [x] Update orderController.js to support pagination for getAllOrders
+
+## Frontend Changes
+- [x] Update UserManagement.jsx to support pagination
+- [x] Update OrderManagement.jsx to support pagination
+
+## Testing
+- [ ] Test pagination functionality in UserManagement
+- [ ] Test pagination functionality in OrderManagement

@@ -26,3 +26,45 @@ export const loginUser = async (req, res) => {
     res.status(401).json({ message: "Invalid email or password" });
   }
 };
+
+export const getUserProfile = async (req, res) => {
+  const user = await User.findById(req.user._id).select('-password');
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  const { page = 1, limit = 15 } = req.query;
+
+  const skip = (page - 1) * limit;
+  const users = await User.find({}).select('-password').skip(skip).limit(Number(limit));
+  const total = await User.countDocuments();
+
+  res.json({
+    users,
+    totalPages: Math.ceil(total / limit),
+    currentPage: Number(page),
+    totalUsers: total
+  });
+};
+
+export const updateUser = async (req, res) => {
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('-password');
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (user) {
+    res.json({ message: 'User deleted' });
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+};

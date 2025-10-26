@@ -7,13 +7,36 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const [user, setUser] = useState(null)
+
   useEffect(() => {
     const token = localStorage.getItem('token')
     setIsLoggedIn(!!token)
 
+    const fetchUser = async () => {
+      if (token) {
+        try {
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/profile`, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+          if (response.ok) {
+            const userData = await response.json()
+            setUser(userData)
+          }
+        } catch (err) {
+          console.error('Failed to fetch user:', err)
+        }
+      } else {
+        setUser(null)
+      }
+    }
+
+    fetchUser()
+
     const handleAuthChange = () => {
       const token = localStorage.getItem('token')
       setIsLoggedIn(!!token)
+      fetchUser()
     }
 
     window.addEventListener('authChange', handleAuthChange)
@@ -49,7 +72,7 @@ const Navbar = () => {
         <div className="hidden md:flex space-x-8 text-gray-600 font-medium">
           <Link to="/" className="hover:text-black transition-colors duration-200">Home</Link>
           <Link to="/shop" className="hover:text-black transition-colors duration-200">Shop</Link>
-          <Link to="/new" className="hover:text-black transition-colors duration-200">New Arrival</Link>
+          {/* <Link to="/new" className="hover:text-black transition-colors duration-200">New Arrival</Link> */}
           <Link to="/about" className="hover:text-black transition-colors duration-200">About</Link>
           <Link to="/contact" className="hover:text-black transition-colors duration-200">Contact Us</Link>
         </div>
@@ -70,6 +93,12 @@ const Navbar = () => {
 
           {isLoggedIn ? (
             <div className="flex items-center space-x-4">
+              {/* Admin Link */}
+              {user && user.isAdmin && (
+                <Link to="/admin-login" className="text-gray-600 hover:text-black transition-colors duration-200">
+                  Admin
+                </Link>
+              )}
               {/* Profile Icon */}
               <Link to="/profile" className="text-gray-600 hover:text-black transition-colors duration-200">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,6 +168,14 @@ const Navbar = () => {
             {/* Mobile Auth Section */}
             {isLoggedIn ? (
               <div className="border-t border-gray-200 pt-4 space-y-4">
+                {user && user.isAdmin && (
+                  <Link to="/admin-login" className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200" onClick={closeMenu}>
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span>Admin</span>
+                  </Link>
+                )}
                 <Link to="/profile" className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors duration-200" onClick={closeMenu}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

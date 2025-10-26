@@ -16,7 +16,7 @@ const NewArrivalProducts = () => {
 
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/products?limit=8&sort=-createdAt`);
-        const fetchedProducts = response.data.products;
+        const fetchedProducts = response.data.products || [];
 
         setProducts(fetchedProducts);
         setLoading(false);
