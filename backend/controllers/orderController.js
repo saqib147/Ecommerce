@@ -86,3 +86,72 @@ export const updateOrderStatus = async (req, res) => {
   await order.save();
   res.json(order);
 };
+
+export const getOrderStatus = async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    // Only select necessary fields for public tracking
+    const order = await Order.findById(orderId)
+      .select('status createdAt updatedAt orderNumber')
+      .lean(); // Use lean() for better performance since we don't need the full document
+    
+    if (!order) {
+      return res.status(404).json({ 
+        message: "Order not found. Please check your order ID and try again."
+      });
+    }
+
+    // Define status information with emojis and progress percentage
+    const statusInfo = {
+      pending: {
+        emoji: "🕒",
+        message: "Order is being processed",
+        progress: 20
+      },
+      confirmed: {
+        emoji: "✅",
+        message: "Order confirmed",
+        progress: 40
+      },
+      shipped: {
+        emoji: "📦",
+        message: "Order is on the way",
+        progress: 60
+      },
+      outForDelivery: {
+        emoji: "🚚",
+        message: "Out for delivery",
+        progress: 80
+      },
+      delivered: {
+        emoji: "🎉",
+        message: "Order delivered",
+        progress: 100
+      },
+      cancelled: {
+        emoji: "❌",
+        message: "Order cancelled",
+        progress: 0
+      }
+    };
+
+    const orderStatus = statusInfo[order.status.toLowerCase()] || {
+      emoji: "❓",
+      message: "Unknown status",
+      progress: 0
+    };
+
+    res.json({
+      orderId: order._id,
+      status: order.status,
+      emoji: orderStatus.emoji,
+      message: orderStatus.message,
+      progress: orderStatus.progress,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

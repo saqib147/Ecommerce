@@ -91,6 +91,15 @@ const Profile = () => {
                       {new Date(user.createdAt).toLocaleDateString()}
                     </p>
                   </div>
+                  {/* Track Order Button */}
+                  <div className="pt-4 border-t border-gray-200">
+                    <Link
+                      to="/track-order"
+                      className="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors text-center block"
+                    >
+                      Track Your Orders
+                    </Link>
+                  </div>
                   {user.isAdmin && (
                     <div className="pt-4 border-t border-gray-200">
                       <Link

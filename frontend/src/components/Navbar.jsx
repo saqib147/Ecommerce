@@ -75,6 +75,7 @@ const Navbar = () => {
           {/* <Link to="/new" className="hover:text-black transition-colors duration-200">New Arrival</Link> */}
           <Link to="/about" className="hover:text-black transition-colors duration-200">About</Link>
           <Link to="/contact" className="hover:text-black transition-colors duration-200">Contact Us</Link>
+          <Link to="/track-order" className="hover:text-black transition-colors duration-200">Track Order</Link>
         </div>
 
         {/* Desktop Right Side Buttons */}

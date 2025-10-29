@@ -15,6 +15,7 @@ import Checkout from './pages/Checkout'
 import Profile from './pages/Profile'
 import AdminDashboard from './pages/AdminDashboard'
 import ProductDetailPage from './pages/ProductDetailPage'
+import OrderTracking from './pages/OrderTracking'
 import './App.css'
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/track-order" element={<OrderTracking />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/signin" element={<Login />} />
               <Route path="/admin-login" element={<AdminLogin />} />
